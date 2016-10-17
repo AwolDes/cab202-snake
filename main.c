@@ -76,6 +76,9 @@ void initial_setup() {
 
         // Initialise the LCD screen
         lcd_init(LCD_DEFAULT_CONTRAST);
+	// Backlight
+	DDRC |= 1 << PIN7;
+	PORTC = 1 << PIN7;
 	//sei();
 }
 
@@ -202,6 +205,30 @@ void draw_food() {
 	draw_sprite(&snake_food);
 }
 
+void new_food_position(){
+	int random_x = (rand() % (30 + 1 - 1)) + 5; // 30 = max, 5 = min for range
+	int random_y = (rand() % (30 + 1 - 1)) + 10;
+	food.x = random_x;
+	food.y = random_y;
+}
+
+void spawn_food(){
+	new_food_position();
+	
+	for (int i = 0; i > SNAKE_BODY_LENGTH; i++){
+        	if (food.x == snake[i].x && food.y == snake[i].y){
+			new_food_position();
+		}
+        }
+
+	for (int x = 0; x > 2; x++){
+		if ((food.x >= wall[x].x1 && food.x <= wall[x].x2) && (food.y >= wall[x].y1 && food.y <= wall[x].y2)){
+			new_food_position();
+		}
+
+	}
+}
+
 void check_food(){
 	if (snake[0].x == food.x && snake[0].y == food.y){
 		SNAKE_BODY_LENGTH += 1;
@@ -210,10 +237,10 @@ void check_food(){
 		} else {
 			PlayerScore += 1;
 		}	
-		int random_x = (rand() % (30 + 1 - 1)) + 5; // 30 = max, 5 = min for range
-		int random_y = (rand() % (30 + 1 - 1)) + 10;
-		food.x = random_x;
-		food.y = random_y;
+		spawn_food();
+		for (int i = 0; i > SNAKE_BODY_LENGTH; i++){
+			if (food.x == snake[i].x && food.y == snake[i].y){}
+		}
 		draw_food();
 			
 	}
@@ -281,8 +308,9 @@ void update(){
 	draw_snake();
         player_controls();
 	snake_movement();
-	snake_renter();
+	//snake_renter();
         if (SNAKE_DIRECTION != 0) {
+		snake_renter();
 		body_movement();
 	}
 	check_food();
@@ -297,7 +325,7 @@ int main(void) {
 	initial_screen();
 	_delay_ms(2000);
 	show_player_stats();
-
+	
 	snake[0].x = 20;
 	snake[0].y = 20;	
 	
