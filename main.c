@@ -107,15 +107,15 @@ void draw_snake() {
 }
 
 void reset_snake() {
-	clear_screen();
+	//clear_screen();
 	PlayerLives -= 1;
-	snake[0].x = 10;
-	snake[0].y = 10;
+	snake[0].x = 20;
+	snake[0].y = 15;
 	SNAKE_BODY_LENGTH = 1;
 	
-	_delay_ms(200);
+	//_delay_ms(200);
 	SNAKE_DIRECTION = 0;
-	show_screen();
+	//show_screen();
 }
 
 void player_controls() {
@@ -166,16 +166,16 @@ void snake_movement() {
 	// 4 = left
 	if (SNAKE_DIRECTION != 0) {
 		if (SNAKE_DIRECTION == 1){
-			_delay_ms(30);
+			//_delay_ms(30);
 			snake[0].y -= 1;
 		} else if (SNAKE_DIRECTION == 2) {
-			_delay_ms(30);
+			//_delay_ms(30);
 			snake[0].y += 1;
 		} else if (SNAKE_DIRECTION == 3) {
-			_delay_ms(30);
+			//_delay_ms(30);
 			snake[0].x += 1; 
 		} else if (SNAKE_DIRECTION == 4) {
-			_delay_ms(30);
+			//_delay_ms(30);
 			snake[0].x -= 1;
 		} else {
 			snake[0].x = snake[0].x;
@@ -230,7 +230,7 @@ void spawn_food(){
 }
 
 void check_food(){
-	if (snake[0].x == food.x && snake[0].y == food.y){
+	if ((snake[0].x == food.x || snake[0].x == food.x + 1 || snake[0].x == food.x - 1) && (snake[0].y == food.y || snake[0].y == food.y + 1 || snake[0].y == food.y - 1)){
 		SNAKE_BODY_LENGTH += 1;
 		if (ShowWalls == true) {
 			PlayerScore += 2;
@@ -327,12 +327,12 @@ int main(void) {
 	show_player_stats();
 	
 	snake[0].x = 20;
-	snake[0].y = 20;	
+	snake[0].y = 15;	
 	
-	food.x = 30;
-	food.y = 30;
+	new_food_position();
 	
 	while (PlayerLives > 0) {
+		_delay_ms(30);
 		update();
 	}
 	clear_screen();	
@@ -341,4 +341,3 @@ int main(void) {
 	_delay_ms(2000);
 
 }
-
