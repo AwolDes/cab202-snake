@@ -16,7 +16,7 @@
 // Initial Vars
 
 unsigned char PlayerLives = 9;
-unsigned char PlayerScore = 0;
+int PlayerScore = 23;
 unsigned char SnakeSpeed = 30;
 
 typedef int bool;
@@ -32,7 +32,7 @@ Sprite snake_food;
 unsigned char snake_food_bmp[3] = {0b11111111, 0b11111111, 0b11111111};
 
 
-unsigned char SNAKE_BODY_LENGTH = 1;
+unsigned char SNAKE_BODY_LENGTH = 5;
 unsigned char SNAKE_DIRECTION = 0;
 
 // General struct to position snake, snake body & food
@@ -92,15 +92,18 @@ void draw_snake_head(unsigned char x, unsigned char y) {
 	// draws head of the snake
 	// Keeping track of the snake makes it easy to keep track of where it is going
 	draw_snake_body(x, y);
-	set_pixel(x + 1, y + 1, 0);
+	
 }
 
 void draw_snake() {
 	draw_snake_head(snake[0].x, snake[0].y);
-
+	
 	unsigned char i;
-	for (i = 0; i < SNAKE_BODY_LENGTH; i++) {
-		draw_snake_body(snake[i].x, snake[i].y);
+	if (SNAKE_DIRECTION != 0){
+
+		for (i = 0; i < SNAKE_BODY_LENGTH; i++) {
+			draw_snake_body(snake[i].x, snake[i].y);
+		}
 	}
 
 	show_screen();
@@ -109,11 +112,20 @@ void draw_snake() {
 void reset_snake() {
 	//clear_screen();
 	PlayerLives -= 1;
+	unsigned char i;
+        for (i = 0; i < SNAKE_BODY_LENGTH; i++) {
+                snake[i].x = -3;
+                snake[i].y = -3;
+                draw_snake_body(snake[i].x, snake[i].y);
+        }
+
 	snake[0].x = 20;
 	snake[0].y = 15;
-	SNAKE_BODY_LENGTH = 1;
+
+
+	SNAKE_BODY_LENGTH = 5;
 	
-	//_delay_ms(200);
+	_delay_ms(200);
 	SNAKE_DIRECTION = 0;
 	//show_screen();
 }
@@ -250,8 +262,22 @@ void show_player_stats() {
 	draw_string(40, 0, "L: ");
 	draw_char(50, 0, PlayerLives + '0');
         draw_string(5, 0, "S: ");
-	draw_char(15, 0, PlayerScore + '0');
+	int TeenModifier = 1;
+	int TwentiesModifier = 2;
+	if (PlayerScore < 10){
+		draw_char(15, 0, PlayerScore + '0' );
+	} else if (PlayerScore > 10 && PlayerScore < 20){	
+		draw_char(15, 0, (int)TeenModifier + '0' );
+		draw_char(20, 0, (char)PlayerScore-10 + '0');
+	} else if (PlayerScore >= 20) {
+		draw_char(15, 0, (int)TwentiesModifier + '0' );
+                draw_char(20, 0, (char)PlayerScore-20 + '0');
+	}
+	
+	
+	//draw_char(15, 0, PlayerScore + '0');
 }
+
 
 void draw_walls() {
 	wall[0].x1 = 5;
@@ -327,7 +353,8 @@ int main(void) {
 	show_player_stats();
 	
 	snake[0].x = 20;
-	snake[0].y = 15;	
+	snake[0].y = 15;
+		
 	
 	new_food_position();
 	
