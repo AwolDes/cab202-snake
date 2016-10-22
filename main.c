@@ -16,7 +16,7 @@
 // Initial Vars
 
 unsigned char PlayerLives = 9;
-int PlayerScore = 23;
+int PlayerScore = 0;
 unsigned char SnakeSpeed = 30;
 
 typedef int bool;
