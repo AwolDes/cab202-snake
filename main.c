@@ -262,7 +262,11 @@ void show_player_stats() {
 	draw_string(40, 0, "L: ");
 	draw_char(50, 0, PlayerLives + '0');
         draw_string(5, 0, "S: ");
-	int TeenModifier = 1;
+	char buff[6];
+	sprintf(buff, "%d", PlayerScore);
+	draw_string(15, 0, buff);
+
+	/*int TeenModifier = 1;
 	int TwentiesModifier = 2;
 	if (PlayerScore < 10){
 		draw_char(15, 0, PlayerScore + '0' );
@@ -272,7 +276,7 @@ void show_player_stats() {
 	} else if (PlayerScore >= 20) {
 		draw_char(15, 0, (int)TwentiesModifier + '0' );
                 draw_char(20, 0, (char)PlayerScore-20 + '0');
-	}
+	}*/
 	
 	
 	//draw_char(15, 0, PlayerScore + '0');
